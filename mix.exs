@@ -58,6 +58,8 @@ defmodule ExLimiter.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
+      {:reverse_proxy_plug, "~> 2.4", only: :dev},
+      {:httpoison, "~> 2.0", only: :dev},
       {:bandit, "~> 1.2"}
     ]
   end

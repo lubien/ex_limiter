@@ -16,7 +16,7 @@ defmodule ExLimiterWeb.Replayer do
   end
 
   def handle_replay(conn) do
-    proxy_params = [upstream: "//localhost:3000"]
+    proxy_params = [upstream: "//localhost:3000", response_mode: :buffer]
     opts = ReverseProxyPlug.init(proxy_params)
     ReverseProxyPlug.call(conn, opts)
     |> halt()

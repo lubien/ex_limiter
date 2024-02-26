@@ -17,6 +17,7 @@ defmodule ExLimiter.Application do
       {Phoenix.PubSub, name: ExLimiter.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: ExLimiter.Finch},
+      {Task.Supervisor, name: ExLimiter.RequestSaveSupervisor},
       # Start a worker by calling: ExLimiter.Worker.start_link(arg)
       # {ExLimiter.Worker, arg},
       # Start to serve requests, typically the last entry

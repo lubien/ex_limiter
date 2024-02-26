@@ -101,4 +101,29 @@ defmodule ExLimiter.Limiter do
   def change_request(%Request{} = request, attrs \\ %{}) do
     Request.changeset(request, attrs)
   end
+
+  def calculate_limit_for_user(user_id) do
+    minute_string = (
+      DateTime.utc_now(:second)
+      |> DateTime.to_iso8601()
+      |> String.slice(0, 16)
+    )
+
+    {:ok, bucket_start, 0} = DateTime.from_iso8601("#{minute_string}:00Z")
+    bucket_end = DateTime.add(bucket_start, 60, :second)
+
+    requests_in_bucket =
+      Request
+      |> where(user_id: ^user_id)
+      |> where([r], r.inserted_at >= ^bucket_start and r.inserted_at <= ^bucket_end)
+      |> Repo.aggregate(:count)
+
+    limit = 60
+    %{
+      used: requests_in_bucket,
+      remaining: limit - requests_in_bucket,
+      limit: limit,
+      reset: bucket_end
+    }
+  end
 end
